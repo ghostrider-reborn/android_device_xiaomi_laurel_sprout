@@ -48,7 +48,7 @@ PRODUCT_PACKAGES_DEBUG += \
 PRODUCT_STATIC_BOOT_CONTROL_HAL := \
     bootctrl.trinket \
     libcutils \
-    libgptutils \
+    libgptutils.xiaomi_trinket.recovery \
     libz
 
 # Audio

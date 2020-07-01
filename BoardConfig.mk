@@ -13,6 +13,9 @@ DEVICE_PATH := device/xiaomi/laurel_sprout
 # Audio
 TARGET_PROVIDES_AUDIO_EXTNS := true
 
+# Dex
+BOARD_USES_SYSTEM_OTHER_ODEX := true
+
 # HIDL
 DEVICE_MANIFEST_FILE += $(DEVICE_PATH)/configs/hidl/manifest.xml
 

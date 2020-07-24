@@ -58,69 +58,6 @@ on init
 on early-fs
     start vold
 
-# Add a cpuset for the camera daemon
-# We want all cores for camera
-    mkdir /dev/cpuset/camera-daemon
-    write /dev/cpuset/camera-daemon/cpus 0-7
-    write /dev/cpuset/camera-daemon/mems 0
-    chown cameraserver cameraserver /dev/cpuset/camera-daemon
-    chown cameraserver cameraserver /dev/cpuset/camera-daemon/tasks
-    chmod 0660 /dev/cpuset/camera-daemon/tasks
-
-    # Create an stune group for camera-specific processes
-    mkdir /dev/stune/camera-daemon
-    write /dev/stune/camera-daemon/schedtune.prefer_idle 1
-    write /dev/stune/camera-daemon/schedtune.boost 0
-    chown system system /dev/stune/camera-daemon
-    chown system system /dev/stune/camera-daemon/tasks
-    chmod 0664 /dev/stune/camera-daemon/tasks
-
-    mkdir /dev/cpuset/system 0750 root system
-    write /dev/cpuset/system/cpus 0
-    write /dev/cpuset/system/mems 0
-    chown system system /dev/cpuset/system/tasks
-    chmod 0660 /dev/cpuset/system/tasks
-
-    mkdir /dev/cpuset/system/performance 0750 root system
-    write /dev/cpuset/system/performance/cpus 0
-    write /dev/cpuset/system/performance/mems 0
-    chown system system /dev/cpuset/system/performance/tasks
-    chmod 0660 /dev/cpuset/system/performance/tasks
-
-    mkdir /dev/cpuset/system/background 0750 root system
-    write /dev/cpuset/system/background/cpus 0
-    write /dev/cpuset/system/background/mems 0
-    chown system system /dev/cpuset/system/background/tasks
-    chmod 0660 /dev/cpuset/system/background/tasks
-
-    mkdir /dev/cpuset/application 0750 root system
-    write /dev/cpuset/application/cpus 0
-    write /dev/cpuset/application/mems 0
-    chown system system /dev/cpuset/application/tasks
-    chmod 0660 /dev/cpuset/application/tasks
-
-    mkdir /dev/cpuset/application/performance 0750 root system
-    write /dev/cpuset/application/performance/cpus 0
-    write /dev/cpuset/application/performance/mems 0
-    chown system system /dev/cpuset/application/performance/tasks
-    chmod 0660 /dev/cpuset/application/performance/tasks
-
-    mkdir /dev/cpuset/application/background 0750 root system
-    write /dev/cpuset/application/background/cpus 0
-    write /dev/cpuset/application/background/mems 0
-    chown system system /dev/cpuset/application/background/tasks
-    chmod 0660 /dev/cpuset/application/background/tasks
-
-    write /dev/cpuset/kernel/cpus 0-7
-    write /dev/cpuset/system/cpus 0-7
-    write /dev/cpuset/system/performance/cpus 0-7
-    write /dev/cpuset/system/background/cpus 0-7
-    write /dev/cpuset/system/cpus 0-7
-    write /dev/cpuset/application/cpus 0-7
-    write /dev/cpuset/application/performance/cpus 0-7
-    write /dev/cpuset/application/background/cpus 0-7
-    write /dev/cpuset/application/cpus 0-7
-
 on fs
     start hwservicemanager
     mount_all /vendor/etc/fstab.qcom --early
@@ -138,6 +75,13 @@ on fs
 
     mkdir /mnt/vendor/persist/misys 0755 system system
     mkdir /mnt/vendor/persist/camera 0777 root root
+
+    chmod 0776 /mnt/vendor/persist/camera/calib_result
+    chmod 0776 /mnt/vendor/persist/camera/verify_result
+    chmod 0776 /mnt/vendor/persist/camera/raw_result
+    chown root root /mnt/vendor/persist/camera/calib_result
+    chown root root /mnt/vendor/persist/camera/verify_result
+    chown root root /mnt/vendor/persist/camera/raw_result
 
 on post-fs
     # set RLIMIT_MEMLOCK to 64MB
@@ -197,36 +141,37 @@ on boot
     write /dev/cpuset/background/cpus 0-7
     write /dev/cpuset/system-background/cpus 0-7
 
-    #define back flash and front flash
-    chmod 0660 /sys/android_camera/sensor
-    chmod 0660 /sys/class/leds/led:flash_0/brightness
-    chmod 0660 /sys/class/leds/led:flash_1/brightness
-    chmod 0660 /sys/class/leds/led:flash_2/brightness
-    chmod 0660 /sys/class/leds/led:torch_0/brightness
-    chmod 0660 /sys/class/leds/led:torch_1/brightness
-    chmod 0660 /sys/class/leds/led:torch_2/brightness
-    chmod 0660 /sys/class/leds/led:switch_0/brightness
-    chmod 0660 /sys/class/leds/led:switch_1/brightness
-    chmod 0660 /sys/class/leds/flashlight/brightness
-    chown system system /sys/android_camera/sensor
-    chown system system /sys/class/leds/led:flash_0/brightness
-    chown system system /sys/class/leds/led:flash_1/brightness
-    chown system system /sys/class/leds/led:flash_2/brightness
-    chown system system /sys/class/leds/led:torch_0/brightness
-    chown system system /sys/class/leds/led:torch_1/brightness
-    chown system system /sys/class/leds/led:torch_2/brightness
-    chown system system /sys/class/leds/led:switch_0/brightness
-    chown system system /sys/class/leds/led:switch_1/brightness
-    chown system system /sys/class/leds/flashlight/brightness
+# Add a cpuset for the camera daemon
+# We want all cores for camera
+    mkdir /dev/cpuset/camera-daemon
+    write /dev/cpuset/camera-daemon/cpus 0-7
+    write /dev/cpuset/camera-daemon/mems 0
+    chown cameraserver cameraserver /dev/cpuset/camera-daemon
+    chown cameraserver cameraserver /dev/cpuset/camera-daemon/tasks
+    chmod 0660 /dev/cpuset/camera-daemon/tasks
 
-# D2TW
-    chown system system /proc/tp_gesture
-    chmod 0660 /proc/tp_gesture
+# Displayfeature for android_one
+    chown system system /sys/class/backlight/panel0-backlight/brightness_clone
 
-# access permissions for FPC service
-   chown system system /sys/bus/platform/devices/soc/soc:fpc1020/irq
-   chown system system /sys/bus/platform/devices/soc/soc:fpc1020/wakeup_enable
-   chmod 0666 /dev/qseecom
+#bug434109 add for goodix fingerprint huangfusheng.wt 20190319
+   mkdir /data/vendor/goodix
+   chmod 0777 /data/vendor/goodix
+   chown system system /data/vendor/goodix
+   mkdir /data/vendor/goodix/gf_data
+   mkdir /data/vendor/goodix/gf_cali
+   mkdir /data/vendor/goodix/factory_test
+   chown system system /data/vendor/goodix/gf_data
+   chown system system /data/vendor/goodix/gf_cali
+   chown system system /data/vendor/goodix/factory_test
+   chmod 0777 /sys/class/drm/card0-DSI-1/disp_param
+   chmod 0777 /sys/class/touch/tp_dev/fod_status
+   chown system system /sys/class/drm/card0-DSI-1/disp_param
+
+#bug 440056  permission add for lcd   zhangxiaolong.wt 20190425
+   chmod 0660 /sys/class/drm/card0-DSI-1/acl
+   chown system system /sys/class/drm/card0-DSI-1/acl
+   chmod 0440 /sys/class/drm/card0-DSI-1/white_read
+   chown system system /sys/class/drm/card0-DSI-1/white_read
 
 #Load WLAN driver
     chown wifi wifi /sys/module/wlan/parameters/fwpath
@@ -268,9 +213,7 @@ on property:sys.shutdown.requested=*
     stop vendor.ims_rtp_daemon
 
 on charger
-    chown system system /sys/class/leds/red/brightness
-    chmod 0666 /sys/class/leds/red/brightness
-    setprop vendor.usb.controller a600000.dwc3
+    setprop vendor.usb.controller 4e00000.dwc3
     setprop sys.usb.configfs 1
     start vendor.power_off_alarm
 
@@ -320,30 +263,6 @@ service cdsprpcd /vendor/bin/cdsprpcd
    user system
    group system
 
-service nqnfcinfo /system/vendor/bin/nqnfcinfo
-    class late_start
-    group nfc
-    user system
-    oneshot
-    disabled
-
-service nqnfc_1_2_hal_service /vendor/bin/hw/vendor.nxp.hardware.nfc@1.2-service
-    override
-    class hal
-    user nfc
-    group nfc
-    disabled
-
-on property:ro.product.device=willow
-    enable nqnfcinfo
-    enable nqnfc_1_2_hal_service
-
-on property:sys.thermallct.isincall=1
-    write /sys/class/power_supply/battery/device/thermalcall 1
-
-on property:sys.thermallct.isincall=0
-    write /sys/class/power_supply/battery/device/thermalcall 0
-
 on property:sys.boot_completed=1
     # Runtime fs tuning
     write /sys/block/sda/queue/read_ahead_kb 128
@@ -352,13 +271,3 @@ on property:sys.boot_completed=1
     write /sys/block/sde/queue/read_ahead_kb 128
     write /sys/block/sde/queue/nr_requests 128
     write /sys/block/sde/queue/iostats 0
-
-#add MIUI camera flag
-on property:sys.camera.miui.apk=*
-    setprop vendor.camera.miui.apk ${sys.camera.miui.apk}
-
-#add 720p@240fps video
-on  property:vendor.camera.cpuperf.en=1
-	write /dev/stune/foreground/schedtune.prefer_idle 1
-on  property:vendor.camera.cpuperf.en=0
-	write /dev/stune/foreground/schedtune.prefer_idle 0

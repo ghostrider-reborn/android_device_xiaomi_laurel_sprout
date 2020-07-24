@@ -20,6 +20,7 @@ BOARD_USES_SYSTEM_OTHER_ODEX := true
 DEVICE_MANIFEST_FILE += $(DEVICE_PATH)/configs/hidl/manifest.xml
 
 # Kernel
+BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
 TARGET_KERNEL_SOURCE := kernel/xiaomi/laurel_sprout
 TARGET_KERNEL_CONFIG := vendor/laurel_sprout-perf_defconfig
 

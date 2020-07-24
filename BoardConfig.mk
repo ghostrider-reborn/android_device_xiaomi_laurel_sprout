@@ -8,13 +8,10 @@
 # Inherit from trinket-common
 -include device/xiaomi/trinket-common/BoardConfigCommon.mk
 
-DEVICE_PATH := device/xiaomi/ginkgo
+DEVICE_PATH := device/xiaomi/laurel_sprout
 
 # Audio
 TARGET_PROVIDES_AUDIO_EXTNS := true
-
-# Assert
-TARGET_OTA_ASSERT_DEVICE := ginkgo,willow
 
 # Charger
 TARGET_USES_AOSP_CHARGER := true
@@ -22,19 +19,10 @@ BOARD_HEALTHD_CUSTOM_CHARGER_RES := $(DEVICE_PATH)/charger/images
 
 # HIDL
 DEVICE_MANIFEST_FILE += $(DEVICE_PATH)/configs/hidl/manifest.xml
-ODM_MANIFEST_WILLOW_FILES := $(DEVICE_PATH)/configs/hidl/manifest_willow.xml
-ODM_MANIFEST_SKUS += willow
-
-# Init
-TARGET_INIT_VENDOR_LIB := //$(DEVICE_PATH):libinit_ginkgo
-TARGET_RECOVERY_DEVICE_MODULES := libinit_ginkgo
 
 # Kernel
-TARGET_KERNEL_SOURCE := kernel/xiaomi/ginkgo
-TARGET_KERNEL_CONFIG := vendor/ginkgo-perf_defconfig
-
-# NFC
-TARGET_USES_NQ_NFC := true
+TARGET_KERNEL_SOURCE := kernel/xiaomi/laurel_sprout
+TARGET_KERNEL_CONFIG := vendor/laurel_sprout-perf_defconfig
 
 # Partitions
 BOARD_CACHEIMAGE_PARTITION_SIZE := 402653184
@@ -52,13 +40,10 @@ TARGET_VENDOR_PROP += $(DEVICE_PATH)/vendor.prop
 # Recovery
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/etc/fstab.qcom
 
-# Releasetools
-TARGET_RELEASETOOLS_EXTENSIONS := $(DEVICE_PATH)
-
 # Sepolicy
 BOARD_PLAT_PUBLIC_SEPOLICY_DIR += $(DEVICE_PATH)/sepolicy/public
 BOARD_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/vendor
 
 # Inherit from the proprietary version
--include vendor/xiaomi/ginkgo/BoardConfigVendor.mk
+-include vendor/xiaomi/laurel_sprout/BoardConfigVendor.mk
 -include vendor/miuicamera/common/BoardConfigVendor.mk

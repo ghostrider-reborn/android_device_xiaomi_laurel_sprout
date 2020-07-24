@@ -8,7 +8,7 @@
 
 set -e
 
-export DEVICE=ginkgo
+export DEVICE=laurel_sprout
 export DEVICE_COMMON=trinket-common
 export VENDOR=xiaomi
 

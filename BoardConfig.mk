@@ -13,10 +13,6 @@ DEVICE_PATH := device/xiaomi/laurel_sprout
 # Audio
 TARGET_PROVIDES_AUDIO_EXTNS := true
 
-# Charger
-TARGET_USES_AOSP_CHARGER := true
-BOARD_HEALTHD_CUSTOM_CHARGER_RES := $(DEVICE_PATH)/charger/images
-
 # HIDL
 DEVICE_MANIFEST_FILE += $(DEVICE_PATH)/configs/hidl/manifest.xml
 
